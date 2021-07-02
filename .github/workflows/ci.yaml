@@ -8,7 +8,7 @@ jobs:
   deploy: 
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: eu.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_APPLICATION }}
+      IMAGE_NAME: eu.gcr.io/${{ secrets.GCP_SERVICE }}/${{ secrets.GCP_APPLICATION }}
     
     steps: 
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to Cloud Run (Setup)
         uses: google-github-actions/setup-gcloud@master
         with:
-          project_id: ${{ secrets.GCP_PROJECT }}
+          project_id: ${{ secrets.GCP_SERVICE }}
           service_account_email: ${{ secrets.GCP_EMAIL }}
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
           export_default_credentials: true
@@ -42,4 +42,4 @@ jobs:
         run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image
-        run: gcloud run deploy ${{ secrets.GCP_PROJECT }} --image $IMAGE_NAME --region ${{ secrets.GCP_REGION }} --platform managed
+        run: gcloud run deploy ${{ secrets.GCP_PROJECT }} --image=$IMAGE_NAME --region=${{ secrets.GCP_REGION }} --platform managed
