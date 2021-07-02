@@ -91,4 +91,4 @@ sw.*
 
 .config
 .env-production
-my.secrets
+.secrets

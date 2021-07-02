@@ -1,3 +1,6 @@
 node_modules
 npm-debug*
 .nuxt
+test
+jest.config.js
+.github

@@ -7,13 +7,12 @@ on:
 jobs: 
   deploy: 
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: eu.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_APPLICATION }}
     
     steps: 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Checkout
+        uses: actions/checkout@master
 
       - name: Create .env file
         id: env_file
@@ -23,29 +22,24 @@ jobs:
           encodedString: ${{ secrets.ENV }}
 
       - name: Move .env into project
-        run: |
-          mv ${{ steps.env_file.outputs.filePath }} .
-
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          file: ./Dockerfile
-          push: false
-          tags: eu.gcr.io/stories-fans/app
+        run: mv ${{ steps.env_file.outputs.filePath }} .
 
       - name: Deploy to Cloud Run (Setup)
         uses: google-github-actions/setup-gcloud@master
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_email: ${{ secrets.GCP_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
           export_default_credentials: true
 
-      - name: Deploy to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@main
-        with:
-          image: eu.gcr.io/stories-fans/app
-          service: stories-fans
-          region: europe-north1
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quiet
 
-      - name: Use Output
-        run: curl "${{ steps.deploy.outputs.url }}"
+      - name: Build docker
+        run: docker build . -t $IMAGE_NAME
+
+      - name: Push Docker image
+        run: docker push $IMAGE_NAME
+
+      - name: Deploy Docker image
+        run: gcloud run deploy ${{ secrets.GCP_PROJECT }} --image $IMAGE_NAME --region ${{ secrets.GCP_REGION }} --platform managed
