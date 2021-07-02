@@ -64,6 +64,10 @@ export default {
           onAuthStateChangedAction: AUTH.ACTIONS.ON_AUTH_STATE_CHANGED_ACTION,
         },
         ssr: true,
+        // {
+        //   credential: true,
+        //   serverLogin: true,
+        // },
         // emulatorPort: 9099,
         // emulatorHost: 'http://localhost',
       },

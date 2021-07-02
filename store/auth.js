@@ -22,11 +22,15 @@ export const mutations = {
 export const actions = {
   async signInWithEmailPassword(_, { email, password }) {
     try {
-      const { user } = await this.$fire.auth.signInWithEmailAndPassword(
+      const auth = await this.$fire.auth.signInWithEmailAndPassword(
         email,
         password
       )
-      console.log('User connected', user)
+
+      const access_token = await this.$fire.auth.currentUser.getIdToken()
+
+      this.$cookies.set('access_token', access_token)
+      this.$cookies.set('__session', access_token)
     } catch (error) {
       console.log(error)
     }
@@ -37,6 +41,7 @@ export const actions = {
     commit('IS_AUTHENTICATED')
 
     this.$cookies.remove('user')
+    this.$cookies.set('access_token')
   },
   async onAuthStateChangedAction({ commit }, { authUser }) {
     if (authUser === null) {

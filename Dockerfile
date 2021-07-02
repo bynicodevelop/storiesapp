@@ -17,5 +17,7 @@ EXPOSE 8080
 
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=8080
+ENV NODE_ENV=production
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/stories-fans-firebase-adminsdk-2oyzx-8b03a16b62.json
 
 CMD [ "yarn", "start" ]
