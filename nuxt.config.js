@@ -17,15 +17,22 @@ export default {
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,500;1,500&display=swap',
+      },
+    ],
   },
 
-  loading: '~/components/loading.vue',
+  loading: '~/components/Loading.vue',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@/assets/app.sass'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~/plugins/vee-validate.client.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -64,12 +71,13 @@ export default {
           onAuthStateChangedAction: AUTH.ACTIONS.ON_AUTH_STATE_CHANGED_ACTION,
         },
         ssr: true,
-        // {
-        //   credential: true,
-        //   serverLogin: true,
-        // },
-        // emulatorPort: 9099,
-        // emulatorHost: 'http://localhost',
+        emulatorPort: 9099,
+        emulatorHost: 'http://localhost',
+        disableEmulatorWarnings: true,
+      },
+      firestore: {
+        emulatorPort: 8081,
+        emulatorHost: 'localhost',
       },
     },
   },

@@ -3,7 +3,7 @@ import { AUTH } from '~/store/auth'
 
 export default defineNuxtMiddleware(({ store, route, redirect }) => {
   console.log('Middleware - Auth')
-  const routesAllowed = ['auth', 'index']
+  const routesAllowed = ['auth', 'index', 'fans', 'auth-register']
 
   if (
     store.getters[AUTH.GETTERS.IS_AUTHENTICATED] &&

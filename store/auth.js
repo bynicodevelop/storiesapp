@@ -1,8 +1,8 @@
 import _ from 'lodash'
-import BadCredentialsException from '~/exceptions/BadCredentialsException'
-import InvalidEmailException from '~/exceptions/InvalidEmailException'
-import InvalidPasswordException from '~/exceptions/InvalidPasswordException'
-import UserAlreadyExistsException from '~/exceptions/UserAlreadyExistsException'
+import BadCredentialsException from '../exceptions/BadCredentialsException'
+import InvalidEmailException from '../exceptions/InvalidEmailException'
+import InvalidPasswordException from '../exceptions/InvalidPasswordException'
+import UserAlreadyExistsException from '../exceptions/UserAlreadyExistsException'
 
 export const AUTH = {
   ACTIONS: {

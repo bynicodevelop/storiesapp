@@ -1,5 +1,15 @@
 import _ from 'lodash'
-import ParameterRequiredException from '~/exceptions/ParameterRequiredException'
+import ParameterRequiredException from '../exceptions/ParameterRequiredException'
+
+export const BUS_NOTIFICATIONS = {
+  GETTERS: {
+    GET_FLASH_MESSAGE: 'bus-notifications/getFlashMessage',
+  },
+  ACTIONS: {
+    SEND: 'bus-notifications/flashMessage',
+    RESET: 'bus-notifications/reset',
+  },
+}
 
 export const state = () => ({ bus: { message: null, show: false } })
 
@@ -13,6 +23,10 @@ export const mutations = {
   RESET(state) {
     state.bus = { message: null, show: false }
   },
+}
+
+export const getters = {
+  getFlashMessage: (state) => state.bus,
 }
 
 export const actions = {
