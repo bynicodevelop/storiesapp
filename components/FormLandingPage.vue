@@ -35,7 +35,7 @@
         <validation-provider
           name="email"
           v-slot="{ errors }"
-          rules="required|email"
+          rules="required|email|unique_email"
         >
           <v-text-field
             v-model="form.email"
@@ -88,7 +88,7 @@ export default defineComponent({
       (username) => {
         form.value.slug = slugify(username.value, {
           replacement: '-',
-        })
+        }).toLowerCase()
       }
     )
 

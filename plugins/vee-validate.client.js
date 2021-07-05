@@ -22,11 +22,20 @@ export default function ({ store }) {
       async (value) => !(await dispatch(PROFILE.SLUG_EXISTS, { slug: value })),
       300
     ),
-    getMessage: (field) => 'Slug is already used',
+    message: 'Slug is already used',
+  })
+
+  extend('unique_email', {
+    validate: debounce(
+      async (value) =>
+        !(await dispatch(PROFILE.EMAIL_EXISTS, { email: value })),
+      300
+    ),
+    message: 'Email is already used',
   })
 
   extend('is_slug', {
-    validate: (value) => value == slugify(value),
+    validate: (value) => value.toLowerCase() == slugify(value).toLowerCase(),
     message: 'This slug is invalid (only alphanumeric characters and -)',
   })
 }
