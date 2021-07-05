@@ -116,10 +116,9 @@ export default defineComponent({
 })
 </script>
 
-<style>
-#form-mentions {
-  font-style: italic;
-  font-size: 0.6rem;
-  color: #838383;
-}
+<style lang="sass">
+#form-mentions
+  font-style: italic
+  font-size: 0.6rem
+  color: #838383
 </style>

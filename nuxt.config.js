@@ -26,7 +26,7 @@ export default {
     ],
   },
 
-  loading: '~/components/Loading.vue',
+  loading: '~/components/LoadingComponent.vue',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@/assets/app.sass'],
@@ -71,13 +71,15 @@ export default {
           onAuthStateChangedAction: AUTH.ACTIONS.ON_AUTH_STATE_CHANGED_ACTION,
         },
         ssr: true,
-        emulatorPort: 9099,
-        emulatorHost: 'http://localhost',
+        emulatorPort: process.env.NODE_ENV === 'development' ? 9099 : null,
+        emulatorHost:
+          process.env.NODE_ENV === 'development' ? 'http://localhost' : null,
         disableEmulatorWarnings: true,
       },
       firestore: {
-        emulatorPort: 8081,
-        emulatorHost: 'localhost',
+        emulatorPort: process.env.NODE_ENV === 'development' ? 8081 : null,
+        emulatorHost:
+          process.env.NODE_ENV === 'development' ? 'localhost' : null,
       },
     },
   },

@@ -23,7 +23,6 @@
     "nuxt-i18n": "^6.27.2",
     "slugify": "^1.5.3",
     "vee-validate": "^3.4.10",
-    "vuelidate": "^0.7.6",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {
