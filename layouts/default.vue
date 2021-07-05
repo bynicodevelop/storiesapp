@@ -2,7 +2,7 @@
   <v-app dark>
     <v-main>
       <v-container>
-        <loading />
+        <loading-component />
         <Nuxt />
         <notifications />
       </v-container>

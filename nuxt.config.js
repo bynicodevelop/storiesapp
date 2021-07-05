@@ -26,7 +26,7 @@ export default {
     ],
   },
 
-  loading: '~/components/Loading.vue',
+  loading: '~/components/LoadingComponent.vue',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@/assets/app.sass'],
