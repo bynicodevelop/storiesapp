@@ -4,10 +4,13 @@
       <v-container>
         <loading />
         <Nuxt />
+        <notifications />
       </v-container>
     </v-main>
     <v-footer :absolute="true" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <v-col class="text-center">
+        &copy; Copyright {{ new Date().getFullYear() }} - Stories.fans
+      </v-col>
     </v-footer>
   </v-app>
 </template>
@@ -25,3 +28,8 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="sass">
+.v-footer
+  background-color: #FFF !important
+</style>

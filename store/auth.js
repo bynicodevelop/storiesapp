@@ -1,3 +1,9 @@
+import _ from 'lodash'
+import BadCredentialsException from '../exceptions/BadCredentialsException'
+import InvalidEmailException from '../exceptions/InvalidEmailException'
+import InvalidPasswordException from '../exceptions/InvalidPasswordException'
+import UserAlreadyExistsException from '../exceptions/UserAlreadyExistsException'
+
 export const AUTH = {
   ACTIONS: {
     ON_AUTH_STATE_CHANGED_ACTION: 'auth/onAuthStateChangedAction',
@@ -20,29 +26,53 @@ export const mutations = {
 }
 
 export const actions = {
-  async signInWithEmailPassword(_, { email, password }) {
+  async signInWithEmailPassword(ctx, { email, password }) {
+    if (_.isEmpty(email)) {
+      throw new Error('Email is required')
+    }
+
+    if (_.isEmpty(password)) {
+      throw new Error('Password is required')
+    }
+
     try {
-      const auth = await this.$fire.auth.signInWithEmailAndPassword(
-        email,
-        password
-      )
-
-      const access_token = await this.$fire.auth.currentUser.getIdToken()
-
-      this.$cookies.set('access_token', access_token)
-      this.$cookies.set('__session', access_token)
+      await this.$fire.auth.signInWithEmailAndPassword(email, password)
     } catch (error) {
-      console.log(error)
+      if (
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password'
+      ) {
+        throw new BadCredentialsException()
+      }
     }
   },
-  async signUpWithEmailPassword(_, { email, password }) {},
+
+  async signUpWithEmailPassword(ctx, { email, password }) {
+    if (_.isEmpty(email)) {
+      throw new InvalidEmailException()
+    }
+
+    if (_.isEmpty(password)) {
+      throw new InvalidPasswordException()
+    }
+
+    try {
+      await this.$fire.auth.createUserWithEmailAndPassword(email, password)
+    } catch (error) {
+      if (error.code === 'auth/email-already-exists') {
+        throw new UserAlreadyExistsException()
+      }
+    }
+  },
+
   async signOut({ commit }) {
     await this.$fire.auth.signOut()
+
     commit('IS_AUTHENTICATED')
 
     this.$cookies.remove('user')
-    this.$cookies.set('access_token')
   },
+
   async onAuthStateChangedAction({ commit }, { authUser }) {
     if (authUser === null) {
       commit('IS_AUTHENTICATED')

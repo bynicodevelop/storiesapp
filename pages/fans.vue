@@ -9,10 +9,10 @@
     <v-row justify="center" align="center" class="mb-10">
       <v-col cols="12" sm="8" md="6">
         <h1 class="text-center">
-          Ne soyez plus qu’un simple créateur de contenu
+          Découvrez des contenus inspirants et uniques
         </h1>
         <p class="text-center">
-          Soyez la différence, en racontant des histoires uniques à vos fans.
+          Découvrez les histoires inspirantes de créateurs d’exception.
         </p>
       </v-col>
     </v-row>
@@ -25,31 +25,30 @@
 
     <v-row justify="center" align="center" class="mb-10">
       <v-col cols="12" sm="8" md="6">
-        <h2 class="text-center pb-3">
-          Animez votre communauté autour de vos passions
-        </h2>
+        <h2 class="text-center pb-3">Rejoignez une communauté</h2>
         <p class="text-center">
-          Faites vibrer votre communauté en partageant votre passion et vos
-          valeurs grâce à des contenus uniques.
+          Ne soyez pas seul, partagez avec d’autres, autour d’une même passion
+          qui vous anime.
         </p>
       </v-col>
     </v-row>
 
     <v-row justify="center" align="center" class="mb-10">
       <v-col cols="12" sm="8" md="6">
-        <h2 class="text-center pb-3">Rémunérez vos contenus</h2>
+        <h2 class="text-center pb-3">Soyez plus qu’un simple fan</h2>
         <p class="text-center">
-          Offrez une expérience inoubliable aux membres qui vous le demandent en
-          leur préparant du contenu exclusif tout en étant rémunérés.
+          Nouez un contact privilégier avec les personnes que vous suivez.
+        </p>
+        <p class="text-center">
+          Demandez enfin du contenu unique et exclusif auprès des célébrités que
+          vous suivez.
         </p>
       </v-col>
     </v-row>
 
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6">
-        <h2 class="text-center pb-3">
-          Soyez VIP et réservez votre nom de star
-        </h2>
+        <h2 class="text-center pb-3">Soyez un VIP</h2>
         <p class="text-center">
           Choisissez votre nom aujourd’hui ! <br />
           <strong>
@@ -71,12 +70,14 @@
 
     <v-row justify="center" align="center" class="mb-10">
       <v-col cols="12" sm="8" md="6">
-        <h2 class="text-center pb-3">Suivez vos personnalités préférez</h2>
+        <h2 class="text-center pb-3">
+          Vous avez une passion et souhaitez en vivre ?
+        </h2>
         <p class="text-center mb-5">
-          Même si vous n’avez pas de communauté, inscrivez-vous et accédez à des
-          histoires inspirantes.
+          Que vous ayez une communauté ou non, découvrez que ce que Stories.fans
+          peu vous offir…
         </p>
-        <v-btn color="#FC57D2" dark block link :to="{ name: 'fans' }">
+        <v-btn color="#FC57D2" dark block link :to="{ name: 'index' }">
           En savoir plus
         </v-btn>
       </v-col>
