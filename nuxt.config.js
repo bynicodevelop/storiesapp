@@ -8,12 +8,61 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - storiesapp',
-    title: 'storiesapp',
+    titleTemplate: '%s - Stories.fans',
+    title: 'Créez du contenu inspirant pour ton audience',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Créez du contenu inspirant pour ton audience',
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Stories.fans - Créez du contenu inspirant pour ton audience',
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: 'Stories.fans - Créez du contenu inspirant pour ton audience',
+      },
+      {
+        hid: 'twitter:image',
+        name: 'twitter:image',
+        content: 'images/header.png',
+      },
+      {
+        hid: 'twitter:image:alt',
+        name: 'twitter:image:alt',
+        content: 'Stories.fans - Créez du contenu inspirant pour ton audience',
+      },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: 'Stories.fans - Créez du contenu inspirant pour ton audience',
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: 'Stories.fans - Créez du contenu inspirant pour ton audience',
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'images/header.png',
+      },
+      {
+        hid: 'og:image:secure_url',
+        property: 'og:image:secure_url',
+        content: 'images/header.png',
+      },
+      {
+        hid: 'og:image:alt',
+        property: 'og:image:alt',
+        content: 'Stories.fans - Créez du contenu inspirant pour ton audience',
+      },
       { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
