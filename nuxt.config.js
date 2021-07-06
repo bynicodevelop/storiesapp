@@ -103,10 +103,6 @@ export default {
     },
   },
 
-  // vite: {
-  //   ssr: true,
-  // },
-
   i18n: {
     locales: [
       {
@@ -114,8 +110,13 @@ export default {
         iso: 'en-US',
         file: 'en.json',
       },
+      {
+        code: 'fr',
+        iso: 'fr-FR',
+        file: 'fr.json',
+      },
     ],
-    defaultLocale: 'en',
+    defaultLocale: 'fr',
     strategy: 'no_prefix',
     lazy: true,
     langDir: '~/assets/locales/',

@@ -1,0 +1,86 @@
+{   
+    "landing": {
+        "notification-alert": {
+            "content-1": "Septemble 2021 sera exceptionnel !",
+            "content-2": "Soyez là pour découvrir l’application Stories.fans."
+        },
+        "index": {
+            "title-1": "Ne soyez plus qu’un simple créateur de contenu",
+            "content-1": "Soyez la différence, en racontant des histoires uniques à vos fans.",
+            "title-2": "Animez votre communauté autour de vos passions",
+            "content-2": "Faites vibrer votre communauté en partageant votre passion et vos valeurs grâce à des contenus uniques.",
+            "title-3": "Rémunérez vos contenus",
+            "content-3": "Offrez une expérience inoubliable aux membres qui vous le demandent en leur préparant du contenu exclusif tout en étant rémunérés.",
+            "title-4": "Soyez VIP et réservez votre nom de star",
+            "content-4-1": "Choisissez votre nom aujourd’hui !",
+            "content-4-2": "(avant qu’il ne soit pris par quelqu’un d’autre)",
+            "content-4-3": "Ainsi, quand l’application Stories.fans sortira, nous vous aurons reserver une place en mode VIP.",
+            "title-5": "Suivez vos personnalités préférez",
+            "content-5": "Même si vous n’avez pas de communauté, inscrivez-vous et accédez à des histoires inspirantes.",
+            "button-5": "En savoir plus"
+        },
+        "fans": {
+            "title-1": "Découvrez des contenus inspirants et uniques",
+            "content-1": "Découvrez les histoires inspirantes de créateurs d’exception.",
+            "title-2": "Rejoignez une communauté",
+            "content-2": "Ne soyez pas seul, partagez avec d’autres, autour d’une même passion qui vous anime.",
+            "title-3": "Soyez plus qu’un simple fan",
+            "content-3-1": "Nouez un contact privilégier avec les personnes que vous suivez.",
+            "content-3-2": "Demandez enfin du contenu unique et exclusif auprès des célébrités que vous suivez.",
+            "title-4": "Soyez un VIP",
+            "content-4-1": "Choisissez votre nom aujourd’hui !",
+            "content-4-2": "(avant qu’il ne soit pris par quelqu’un d’autre)",
+            "content-4-3": "Ainsi, quand l’application Stories.fans sortira, nous vous aurons reserver une place en mode VIP.",
+            "title-5": "Vous avez une passion et souhaitez en vivre ?",
+            "content-5": "Que vous ayez une communauté ou non, découvrez que ce que Stories.fans peu vous offir…",
+            "button-5": "En savoir plus"
+        }
+    },
+    "pages": {
+        "auth": {
+            "index": {
+                "title": "Connexion",
+                "input": {
+                    "email": {
+                        "label": "Email"
+                    },
+                    "password": {
+                        "label": "Mot de passe"
+                    }
+                },
+                "btn": {
+                    "connection": {
+                        "label": "Connexion"
+                    },
+                    "create-account": {
+                        "label": "Créer un compte"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "form-landing": {
+            "button": {
+                "label": "Reservez votre nom"
+            },
+            "input": {
+                "username": {
+                    "label": "Votre nom de star"
+                },
+                "slug": {
+                    "label": "Votre identifiant"
+                },
+                "email": {
+                    "label": "Votre email"
+                }
+            },
+            "mentions": "Informations relatives aux traitements des données : Les informations que vous nous transmettez ne sont utilisées que pour vous informer sur la sortie de l’application du site stories.fans. Vos informations sont stockées sur des serveurs sécurisés et cryptés en Europe.",
+            "messages": {
+                "registered": "Félicications ! Vous êtes enregistré",
+                "slug_already_exists": "Votre identifiant exist déjà",
+                "email_already_exists": "L'email exist déjà"
+            }
+        }
+    }
+}

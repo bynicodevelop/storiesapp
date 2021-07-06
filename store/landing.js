@@ -1,15 +1,25 @@
 import _ from 'lodash'
 import SlugAlreadyExistsException from '~/exceptions/SlugAlreadyExistsException'
+import EmailAlreadyExistsException from '~/exceptions/EmailAlreadyExistsException'
 
 export const actions = {
   async register(ctx, { email, username, slug }) {
-    const refUserRegistered = await this.$fire.firestore
+    const refUserSlugRegistered = await this.$fire.firestore
       .collection('landing')
       .where('slug', '==', slug)
       .get()
 
-    if (refUserRegistered.docs.length > 0) {
+    if (refUserSlugRegistered.docs.length > 0) {
       throw new SlugAlreadyExistsException()
+    }
+
+    const refUserEmailRegistered = await this.$fire.firestore
+      .collection('landing')
+      .where('email', '==', email)
+      .get()
+
+    if (refUserEmailRegistered.docs.length > 0) {
+      throw new EmailAlreadyExistsException()
     }
 
     try {
