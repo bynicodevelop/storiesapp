@@ -12,7 +12,12 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, useStore } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  onMounted,
+  useMeta,
+  useStore,
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {

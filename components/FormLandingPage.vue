@@ -10,7 +10,7 @@
           <v-text-field
             v-model="form.username"
             name="username"
-            label="Votre nom de star"
+            :label="$t('components.form-landing.input.username.label')"
             :error-messages="errors"
             outlined
             required
@@ -25,7 +25,7 @@
           <v-text-field
             v-model="form.slug"
             name="slug"
-            label="Votre identifiant"
+            :label="$t('components.form-landing.input.slug.label')"
             :error-messages="errors"
             required
             outlined
@@ -41,33 +41,35 @@
             v-model="form.email"
             name="email"
             type="email"
-            label="Votre email"
+            :label="$t('components.form-landing.input.email.label')"
             :error-messages="errors"
             required
             outlined
           ></v-text-field>
         </validation-provider>
         <v-btn type="submit" color="#FC57D2" dark block>
-          Reservez votre nom
+          {{ $t('components.form-landing.button.label') }}
         </v-btn>
       </v-form>
     </validation-observer>
 
-    <p id="form-mentions">
-      Informations relatives aux traitements des données : Les informations que
-      vous nous transmettez ne sont utilisées que pour vous informer sur la
-      sortie de l’application du site stories.fans. Vos informations sont
-      stockées sur des serveurs sécurisés et cryptés en Europe.
-    </p>
+    <p id="form-mentions">{{ $t('components.form-landing.mentions') }}</p>
   </div>
 </template>
 
 <script>
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
-import { defineComponent, ref, useStore, watch } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  useContext,
+  useStore,
+  watch,
+} from '@nuxtjs/composition-api'
 import slugify from 'slugify'
 import { BUS_NOTIFICATIONS } from '~/store/bus-notifications'
 import SlugAlreadyExistsException from '~/exceptions/SlugAlreadyExistsException'
+import EmailAlreadyExistsException from '~/exceptions/EmailAlreadyExistsException'
 
 export default defineComponent({
   components: {
@@ -97,12 +99,18 @@ export default defineComponent({
         await store.dispatch('landing/register', form.value)
 
         store.dispatch(BUS_NOTIFICATIONS.ACTIONS.SEND, {
-          message: 'Your are registered',
+          message: 'components.form-landing.messages.registered',
         })
       } catch (error) {
         if (error instanceof SlugAlreadyExistsException) {
           store.dispatch(BUS_NOTIFICATIONS.ACTIONS.SEND, {
-            message: 'Your slug already exists',
+            message: 'components.form-landing.messages.slug_already_exists',
+          })
+        }
+
+        if (error instanceof EmailAlreadyExistsException) {
+          store.dispatch(BUS_NOTIFICATIONS.ACTIONS.SEND, {
+            message: 'components.form-landing.messages.email_already_exists',
           })
         }
       }
