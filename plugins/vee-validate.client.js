@@ -19,7 +19,8 @@ export default function ({ store }) {
 
   extend('unique_slug', {
     validate: debounce(
-      async (value) => !(await dispatch(PROFILE.SLUG_EXISTS, { slug: value })),
+      async (value) =>
+        !(await dispatch(PROFILE.ACTIONS.SLUG_EXISTS, { slug: value })),
       300
     ),
     message: 'Slug is already used',
@@ -28,7 +29,7 @@ export default function ({ store }) {
   extend('unique_email', {
     validate: debounce(
       async (value) =>
-        !(await dispatch(PROFILE.EMAIL_EXISTS, { email: value })),
+        !(await dispatch(PROFILE.ACTIONS.EMAIL_EXISTS, { email: value })),
       300
     ),
     message: 'Email is already used',

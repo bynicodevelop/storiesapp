@@ -6,14 +6,16 @@ import BadCredentialsException from '~/exceptions/BadCredentialsException'
 import InvalidEmailException from '~/exceptions/InvalidEmailException'
 import InvalidPasswordException from '~/exceptions/InvalidPasswordException'
 import UserAlreadyExistsException from '~/exceptions/UserAlreadyExistsException'
+import FatalErrorException from '~/exceptions/FatalErrorException'
 
 describe('auth', () => {
-  let actions
+  let actions, state
 
   const cloneStore = cloneDeep(auth)
 
   beforeEach(() => {
     actions = cloneStore.actions
+    state = cloneStore.state
   })
 
   describe('- signInWithEmailPassword', () => {
@@ -192,6 +194,162 @@ describe('auth', () => {
             }
           )
       ).rejects.toThrow(UserAlreadyExistsException)
+    })
+  })
+
+  describe('- getProfile', () => {
+    it('Should call commit method to set profile', async () => {
+      const commit = jest.fn()
+
+      actions = {
+        ...actions,
+        $cookies: {
+          get(param) {
+            expect(param).toBe('user')
+
+            return {
+              uid: 'uid',
+            }
+          },
+        },
+        $fire: {
+          firestore: {
+            collection(collectionName) {
+              expect(collectionName).toBe('users')
+
+              return {
+                doc(uid) {
+                  expect(uid).toBe('uid')
+
+                  return {
+                    get() {
+                      return {
+                        data() {
+                          return {
+                            displayName: 'John Doe',
+                          }
+                        },
+                      }
+                    },
+                  }
+                },
+              }
+            },
+          },
+        },
+      }
+
+      await actions.getProfile({ commit })
+
+      expect(commit).toHaveBeenCalledWith('SET_PROFILE', {
+        displayName: 'John Doe',
+      })
+    })
+
+    it('Should expect an error if the cookies is empty', () => {
+      const commit = jest.fn()
+
+      actions.$cookies = {
+        get(param) {
+          expect(param).toBe('user')
+
+          return undefined
+        },
+      }
+
+      expect(async () => await actions.getProfile({ commit })).rejects.toThrow(
+        FatalErrorException
+      )
+    })
+  })
+
+  describe('- saveProfile', () => {
+    it('Should save profile data (nominal case)', async () => {
+      const commit = jest.fn()
+
+      const profile = {
+        displayName: 'John',
+        email: 'john@domain.tld',
+        photoURL: '',
+        slug: '',
+        bio: '',
+        youtube_link: '',
+        twitter_link: '',
+        instagram_link: '',
+        facebook_link: '',
+        snapchat_link: '',
+      }
+
+      state.profile = profile
+
+      const profileForm = { ...profile, ...{ displayName: 'John Doe' } }
+
+      actions = {
+        ...actions,
+        $cookies: {
+          get(param) {
+            expect(param).toBe('user')
+
+            return {
+              uid: 'uid',
+            }
+          },
+        },
+        $fire: {
+          firestore: {
+            collection(collectionName) {
+              expect(collectionName).toBe('users')
+
+              return {
+                doc(uid) {
+                  expect(uid).toBe('uid')
+
+                  return {
+                    update(data) {
+                      expect(data).toStrictEqual(profileForm)
+                    },
+                  }
+                },
+              }
+            },
+          },
+        },
+      }
+
+      await actions.saveProfile({ commit, state }, profileForm)
+
+      expect(commit).toHaveBeenCalledWith('SET_PROFILE', {
+        ...state.profile,
+        ...profileForm,
+      })
+    })
+
+    it('Should expect an error if cookies is not set', async () => {
+      const commit = jest.fn()
+
+      const profile = {
+        displayName: 'John',
+        email: 'john@domain.tld',
+        photoURL: '',
+        slug: '',
+        youtube_link: '',
+        twitter_link: '',
+        instagram_link: '',
+        facebook_link: '',
+        snapchat_link: '',
+      }
+
+      actions.$cookies = {
+        get(param) {
+          expect(param).toBe('user')
+
+          return undefined
+        },
+      }
+
+      expect(
+        async () => await actions.saveProfile({ commit }, profile)
+      ).rejects.toThrow(FatalErrorException)
     })
   })
 

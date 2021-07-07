@@ -3,26 +3,60 @@ import BadCredentialsException from '../exceptions/BadCredentialsException'
 import InvalidEmailException from '../exceptions/InvalidEmailException'
 import InvalidPasswordException from '../exceptions/InvalidPasswordException'
 import UserAlreadyExistsException from '../exceptions/UserAlreadyExistsException'
+import FatalErrorException from '../exceptions/FatalErrorException'
 
 export const AUTH = {
   ACTIONS: {
     ON_AUTH_STATE_CHANGED_ACTION: 'auth/onAuthStateChangedAction',
+    GET_PROFILE: 'auth/getProfile',
+    SAVE_PROFILE: 'auth/saveProfile',
+    SIGNOUT: 'auth/signOut',
   },
   GETTERS: {
     IS_AUTHENTICATED: 'auth/isAuthenticated',
+    GET_PROFILE: 'auth/getProfile',
   },
 }
 
 export const state = () => ({
   isAuthenticated: false,
+  profile: {},
 })
 
 export const getters = {
   isAuthenticated: (state) => state.isAuthenticated,
+  getProfile: (state) => state.profile,
 }
 
 export const mutations = {
   IS_AUTHENTICATED: (state, status = false) => (state.isAuthenticated = status),
+  SET_PROFILE: (
+    state,
+    {
+      email,
+      photoURL,
+      displayName,
+      slug,
+      bio,
+      youtube_link,
+      twitter_link,
+      instagram_link,
+      facebook_link,
+      snapchat_link,
+    }
+  ) =>
+    (state.profile = {
+      email,
+      photoURL,
+      displayName,
+      slug,
+      bio,
+      youtube_link,
+      twitter_link,
+      instagram_link,
+      facebook_link,
+      snapchat_link,
+    }),
 }
 
 export const actions = {
@@ -65,6 +99,63 @@ export const actions = {
     }
   },
 
+  async getProfile({ commit }) {
+    const { uid } = this.$cookies.get('user') ?? {}
+
+    if (uid == undefined) {
+      throw new FatalErrorException()
+    }
+
+    const userRef = await this.$fire.firestore
+      .collection('users')
+      .doc(uid)
+      .get()
+
+    commit('SET_PROFILE', userRef.data())
+  },
+
+  async saveProfile(
+    { commit, state },
+    {
+      email,
+      photoURL,
+      displayName,
+      slug,
+      bio,
+      youtube_link,
+      twitter_link,
+      instagram_link,
+      facebook_link,
+      snapchat_link,
+    }
+  ) {
+    const { uid } = this.$cookies.get('user') ?? {}
+
+    if (uid == undefined) {
+      throw new FatalErrorException()
+    }
+
+    const profile = {
+      ...state.profile,
+      ...{
+        email,
+        photoURL,
+        displayName,
+        slug,
+        bio,
+        youtube_link,
+        twitter_link,
+        instagram_link,
+        facebook_link,
+        snapchat_link,
+      },
+    }
+
+    await this.$fire.firestore.collection('users').doc(uid).update(profile)
+
+    commit('SET_PROFILE', profile)
+  },
+
   async signOut({ commit }) {
     await this.$fire.auth.signOut()
 
@@ -83,6 +174,7 @@ export const actions = {
     const { uid } = authUser
 
     commit('IS_AUTHENTICATED', true)
+
     this.$cookies.set('user', { uid })
   },
 }

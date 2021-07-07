@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="center" align="center">
+    <v-row justify="center" align="center" class="mt-3">
       <v-col cols="12" sm="8" md="6">
         <notification-landing-page />
       </v-col>

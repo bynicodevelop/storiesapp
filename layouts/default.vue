@@ -1,6 +1,15 @@
 <template>
   <v-app dark>
     <v-main>
+      <v-app-bar>
+        <arrow-back-component />
+
+        <v-avatar size="25" class="mr-2">
+          <img src="/images/logo.jpg" alt="Logo - Stories.fans" />
+        </v-avatar>
+
+        <v-toolbar-title>Stories.fans</v-toolbar-title>
+      </v-app-bar>
       <v-container>
         <loading-component />
         <Nuxt />
@@ -12,12 +21,7 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  onMounted,
-  useMeta,
-  useStore,
-} from '@nuxtjs/composition-api'
+import { defineComponent, onMounted, useStore } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {

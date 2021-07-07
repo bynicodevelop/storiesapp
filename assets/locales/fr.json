@@ -57,9 +57,56 @@
                     }
                 }
             }
+        },
+        "settings": {
+            "profile": {
+                "form": {
+                    "messages": {
+                        "updated": "Profile mis à jour"
+                    },
+                    "btn": {
+                        "label": "Enregistrer"
+                    },
+                    "input": {
+                        "display-name": { 
+                            "label": "Votre nom de star" 
+                        },
+                        "slug": { 
+                            "label": "Votre identifiant" 
+                        },
+                        "email": { 
+                            "label": "Votre email" 
+                        },
+                        "bio": { 
+                            "label": "Une petite description de vous" 
+                        },
+                        "youtube_link": { 
+                            "label": "Votre profil Youtube" 
+                        },
+                        "twitter_link": { 
+                            "label": "Votre profil Twitter" 
+                        },
+                        "instagram_link": { 
+                            "label": "Votre profil Instagram" 
+                        },
+                        "facebook_link": { 
+                            "label": "Votre profil Facebook" 
+                        },
+                        "snapchat_link": { 
+                            "label": "Votre profil Snapchat"
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
+        "btn": {
+            "follow": {
+                "follow-label": "Suivre",
+                "unfollow-label": "Ne plus suivre"
+            }
+        },
         "form-landing": {
             "button": {
                 "label": "Reservez votre nom"
