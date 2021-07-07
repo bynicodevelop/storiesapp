@@ -1,20 +1,20 @@
 <template>
-  <v-btn
-    v-if="isMobile && routeName != 'index' && routeName != 'home'"
-    text
-    link
-    @click.prevent="onBack"
-  >
-    <v-icon>mdi-chevron-left</v-icon>
-  </v-btn>
+  <div v-resize="onResize">
+    <v-btn
+      v-if="width < 600 && !excludeRouteName.includes(routeName)"
+      text
+      link
+      @click.prevent="onBack"
+    >
+      <v-icon>mdi-chevron-left</v-icon>
+    </v-btn>
+  </div>
 </template>
 
 <script>
 import {
   defineComponent,
-  onMounted,
   ref,
-  useContext,
   useRoute,
   useRouter,
   watch,
@@ -22,21 +22,12 @@ import {
 
 export default defineComponent({
   setup() {
-    const isMobile = ref(false)
-    const { $vuetify } = useContext()
+    const width = ref(0)
+    const excludeRouteName = ['index', 'home', 'profile']
     const route = useRoute()
     const router = useRouter()
 
     const routeName = ref(route.value.name)
-
-    onMounted(() => {
-      onResize()
-      window.addEventListener('resize', onResize)
-    })
-
-    const onResize = () => {
-      isMobile.value = $vuetify.breakpoint.width < 600
-    }
 
     watch(
       () => ref(route.value.name),
@@ -45,10 +36,14 @@ export default defineComponent({
 
     const onBack = () => router.go(-1)
 
+    const onResize = () => (width.value = window.innerWidth)
+
     return {
       onBack,
-      isMobile,
       routeName,
+      excludeRouteName,
+      onResize,
+      width,
     }
   },
 })
