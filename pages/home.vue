@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <v-btn color="success" link :to="{ name: 'settings' }">Settings</v-btn>
-  </div>
+  <div>coucou</div>
 </template>
 
 <script>
