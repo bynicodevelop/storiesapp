@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-row>
+    <v-row justify-space-between>
+      <v-col>
+        <v-btn text link :to="{ name: 'profile-search' }">
+          <v-icon>mdi-account-plus-outline</v-icon>
+        </v-btn>
+      </v-col>
       <v-col align="right">
         <v-btn text link :to="{ name: 'settings' }">
           <v-icon>mdi-cog</v-icon>

@@ -151,6 +151,7 @@ import {
   computed,
   defineComponent,
   useAsync,
+  useRouter,
   useStore,
 } from '@nuxtjs/composition-api'
 import { ValidationObserver, ValidationProvider } from 'vee-validate'
@@ -163,9 +164,19 @@ export default defineComponent({
     ValidationProvider,
   },
   setup() {
+    const router = useRouter()
     const store = useStore()
 
-    useAsync(() => store.dispatch(AUTH.ACTIONS.GET_PROFILE))
+    useAsync(async () => {
+      try {
+        await store.dispatch(AUTH.ACTIONS.GET_PROFILE)
+      } catch (error) {
+        console.log(error)
+        await store.dispatch(AUTH.ACTIONS.SIGNOUT)
+
+        router.push({ name: 'auth' })
+      }
+    })
 
     const form = computed(() => store.getters[AUTH.GETTERS.GET_PROFILE])
 

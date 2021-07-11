@@ -224,6 +224,7 @@ describe('auth', () => {
                   return {
                     get() {
                       return {
+                        exists: true,
                         data() {
                           return {
                             displayName: 'John Doe',
@@ -254,6 +255,48 @@ describe('auth', () => {
           expect(param).toBe('user')
 
           return undefined
+        },
+      }
+
+      expect(async () => await actions.getProfile({ commit })).rejects.toThrow(
+        FatalErrorException
+      )
+    })
+
+    it('Should expect an error when user id not exist', () => {
+      const commit = jest.fn()
+
+      actions = {
+        ...actions,
+        $cookies: {
+          get(param) {
+            expect(param).toBe('user')
+
+            return {
+              uid: 'uid',
+            }
+          },
+        },
+        $fire: {
+          firestore: {
+            collection(collectionName) {
+              expect(collectionName).toBe('users')
+
+              return {
+                doc(uid) {
+                  expect(uid).toBe('uid')
+
+                  return {
+                    get() {
+                      return {
+                        exists: false,
+                      }
+                    },
+                  }
+                },
+              }
+            },
+          },
         },
       }
 

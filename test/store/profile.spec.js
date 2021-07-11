@@ -231,4 +231,88 @@ describe('profile', () => {
       ).rejects.toThrow(UserNotFoundException)
     })
   })
+
+  describe('- listProfiles', () => {
+    it('Should call commit to load profiles', async () => {
+      const commit = jest.fn()
+
+      actions.$fire = {
+        firestore: {
+          collection(collectionName) {
+            expect(collectionName).toBe('users')
+
+            return {
+              limit(n) {
+                expect(n).toBe(20)
+
+                return {
+                  get() {
+                    return {
+                      docs: [
+                        {
+                          id: 'uid1',
+                          data() {
+                            return {
+                              email: 'john@domain.tld',
+                              displayName: 'john',
+                            }
+                          },
+                        },
+                        {
+                          id: 'uid2',
+                          data() {
+                            return {
+                              email: 'john@domain.tld',
+                              displayName: 'jane',
+                            }
+                          },
+                        },
+                      ],
+                    }
+                  },
+                }
+              },
+            }
+          },
+        },
+      }
+
+      await actions.listProfiles({ commit })
+
+      expect(commit).toHaveBeenCalledWith('ADD_PROFILES', [
+        { uid: 'uid1', displayName: 'john' },
+        { uid: 'uid2', displayName: 'jane' },
+      ])
+    })
+
+    it('Should not to call commit to load profiles', async () => {
+      const commit = jest.fn()
+
+      actions.$fire = {
+        firestore: {
+          collection(collectionName) {
+            expect(collectionName).toBe('users')
+
+            return {
+              limit(n) {
+                expect(n).toBe(20)
+
+                return {
+                  get() {
+                    return {
+                      docs: [],
+                    }
+                  },
+                }
+              },
+            }
+          },
+        },
+      }
+
+      await actions.listProfiles({ commit })
+
+      expect(commit).not.toHaveBeenCalled()
+    })
+  })
 })

@@ -1,5 +1,10 @@
 <template>
-  <v-bottom-navigation v-resize="onResize" v-if="width < 600" grow>
+  <v-bottom-navigation
+    :fixed="true"
+    v-resize="onResize"
+    v-if="width < 600"
+    grow
+  >
     <v-btn link :to="{ name: 'home' }" value="home">
       <span>Home</span>
 

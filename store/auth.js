@@ -111,6 +111,10 @@ export const actions = {
       .doc(uid)
       .get()
 
+    if (!userRef.exists) {
+      throw new FatalErrorException('User not found')
+    }
+
     commit('SET_PROFILE', userRef.data())
   },
 
