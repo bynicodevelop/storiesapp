@@ -156,20 +156,17 @@ describe('profile', () => {
         firestore: {
           collection(collectionName) {
             expect(collectionName).toBe('users')
-
             return {
               where(fieldName, comparaison, value) {
                 expect(fieldName).toBe('slug')
                 expect(comparaison).toBe('==')
                 expect(value).toBe('slug')
-
                 return {
                   limit(number) {
                     expect(number).toBe(1)
-
                     return {
-                      async get() {
-                        return {
+                      async onSnapshot(cb) {
+                        cb({
                           docs: [
                             {
                               data: () => {
@@ -177,7 +174,7 @@ describe('profile', () => {
                               },
                             },
                           ],
-                        }
+                        })
                       },
                     }
                   },
@@ -188,7 +185,7 @@ describe('profile', () => {
         },
       }
 
-      const result = await actions.loadProfile({ commit }, { slug: 'slug' })
+      actions.loadProfile({ commit }, { slug: 'slug' })
 
       expect(commit).toHaveBeenCalledWith('PROFILE_LOADED', {
         displayName: 'John Doe',
@@ -196,11 +193,12 @@ describe('profile', () => {
     })
 
     it('Should expect an error if user not exist', () => {
+      const commit = jest.fn()
+
       actions.$fire = {
         firestore: {
           collection(collectionName) {
             expect(collectionName).toBe('users')
-
             return {
               where(fieldName, comparaison, value) {
                 expect(fieldName).toBe('slug')
@@ -210,12 +208,11 @@ describe('profile', () => {
                 return {
                   limit(number) {
                     expect(number).toBe(1)
-
                     return {
-                      async get() {
-                        return {
+                      async onSnapshot(cb) {
+                        cb({
                           docs: [],
-                        }
+                        })
                       },
                     }
                   },
@@ -226,9 +223,9 @@ describe('profile', () => {
         },
       }
 
-      expect(
-        async () => await actions.loadProfile({}, { slug: 'slug' })
-      ).rejects.toThrow(UserNotFoundException)
+      actions.loadProfile({ commit }, { slug: 'slug' })
+
+      expect(commit).toHaveBeenCalledWith('PROFILE_NOT_FOUND')
     })
   })
 
@@ -255,6 +252,7 @@ describe('profile', () => {
                             return {
                               email: 'john@domain.tld',
                               displayName: 'john',
+                              slug: 'slug',
                             }
                           },
                         },
@@ -264,6 +262,7 @@ describe('profile', () => {
                             return {
                               email: 'john@domain.tld',
                               displayName: 'jane',
+                              slug: 'slug',
                             }
                           },
                         },
@@ -280,8 +279,24 @@ describe('profile', () => {
       await actions.listProfiles({ commit })
 
       expect(commit).toHaveBeenCalledWith('ADD_PROFILES', [
-        { uid: 'uid1', displayName: 'john' },
-        { uid: 'uid2', displayName: 'jane' },
+        {
+          uid: 'uid1',
+          displayName: 'john',
+          bio: '',
+          nFollowers: 0,
+          nFollowed: 0,
+          slug: 'slug',
+          photoURL: '',
+        },
+        {
+          uid: 'uid2',
+          displayName: 'jane',
+          bio: '',
+          nFollowers: 0,
+          nFollowed: 0,
+          slug: 'slug',
+          photoURL: '',
+        },
       ])
     })
 
@@ -313,6 +328,118 @@ describe('profile', () => {
       await actions.listProfiles({ commit })
 
       expect(commit).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('- follow', () => {
+    it('Should follow a profile', async () => {
+      const commit = jest.fn()
+
+      actions = {
+        ...actions,
+        $cookies: {
+          get(param) {
+            expect(param).toBe('user')
+
+            return { uid: '0987' }
+          },
+        },
+        $fire: {
+          firestore: {
+            collection(collectionName) {
+              expect(collectionName).toBe('users')
+
+              return {
+                doc(uid) {
+                  expect(uid).toBe('1234')
+
+                  return {
+                    collection(subCollectionName) {
+                      expect(subCollectionName).toBe('followers')
+
+                      return {
+                        doc(followerUid) {
+                          expect(followerUid).toBe('0987')
+
+                          return {
+                            get() {
+                              return {
+                                exists: false,
+                              }
+                            },
+                            set(data) {
+                              expect(data).toStrictEqual({
+                                userRef: 'users/0987',
+                              })
+                            },
+                          }
+                        },
+                      }
+                    },
+                  }
+                },
+              }
+            },
+          },
+        },
+      }
+
+      await actions.follow({ commit }, { followUid: '1234' })
+
+      expect(commit).toHaveBeenCalledWith('USER_FOLLOWED')
+    })
+
+    it('Should unfollow a profile', async () => {
+      const commit = jest.fn()
+
+      actions = {
+        ...actions,
+        $cookies: {
+          get(param) {
+            expect(param).toBe('user')
+
+            return { uid: '0987' }
+          },
+        },
+        $fire: {
+          firestore: {
+            collection(collectionName) {
+              expect(collectionName).toBe('users')
+
+              return {
+                doc(uid) {
+                  expect(uid).toBe('1234')
+
+                  return {
+                    collection(subCollectionName) {
+                      expect(subCollectionName).toBe('followers')
+
+                      return {
+                        doc(followerUid) {
+                          expect(followerUid).toBe('0987')
+
+                          return {
+                            get() {
+                              return {
+                                exists: true,
+                              }
+                            },
+                            delete() {},
+                          }
+                        },
+                      }
+                    },
+                  }
+                },
+              }
+            },
+          },
+        },
+      }
+
+      await actions.follow({ commit }, { followUid: '1234' })
+
+      expect(commit).toHaveBeenCalledWith('USER_UNFOLLOWED')
     })
   })
 })

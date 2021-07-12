@@ -5,7 +5,7 @@
         <v-list-item
           :key="index"
           link
-          :to="{ name: 'slug', params: { slug: item.slug } }"
+          :to="{ name: 'slug', params: { slug: `@${item.slug}` } }"
         >
           <v-list-item-avatar>
             <v-img :src="item.photoURL"></v-img>
@@ -16,6 +16,12 @@
             <v-list-item-subtitle v-html="item.bio"></v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
+
+        <v-divider
+          v-if="index < profiles.length - 1"
+          :key="`divider-${index}`"
+          inset
+        ></v-divider>
       </template>
     </v-list>
   </div>

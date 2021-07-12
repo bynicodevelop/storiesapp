@@ -12,6 +12,7 @@ export const PROFILE = {
     EMAIL_EXISTS: 'profile/emailExists',
     LOAD_PROFILE: 'profile/loadProfile',
     LIST_PROFILE: 'profile/listProfiles',
+    FOLLOW: 'profile/follow',
   },
 }
 
@@ -24,10 +25,13 @@ export const mutations = {
   PROFILE_LOADED: (
     state,
     {
+      uid,
       slug,
       displayName,
       photoURL,
       bio,
+      nFollowers,
+      nFollowed,
       facebook_link,
       twitter_link,
       instagram_link,
@@ -35,10 +39,13 @@ export const mutations = {
     }
   ) =>
     (state.profile = {
+      uid,
       slug,
       displayName,
       photoURL,
       bio,
+      nFollowers,
+      nFollowed,
       facebook_link,
       twitter_link,
       instagram_link,
@@ -49,6 +56,8 @@ export const mutations = {
       data.filter(({ uid }) => !state.profiles.find((r) => r.uid == uid))
     )
   },
+  USER_FOLLOWED: (state) => null,
+  USER_UNFOLLOWED: (state) => null,
 }
 
 export const getters = {
@@ -83,18 +92,22 @@ export const actions = {
     return result.docs.length > 0
   },
 
-  async loadProfile({ commit }, { slug }) {
-    const result = await this.$fire.firestore
+  loadProfile({ commit }, { slug }) {
+    this.$fire.firestore
       .collection('users')
       .where('slug', '==', slug)
       .limit(1)
-      .get()
+      .onSnapshot((result) => {
+        if (result.docs.length == 0) {
+          commit('PROFILE_NOT_FOUND')
+          return
+        }
 
-    if (result.docs.length == 0) {
-      throw new UserNotFoundException()
-    }
-
-    commit('PROFILE_LOADED', result.docs[0].data())
+        commit('PROFILE_LOADED', {
+          ...result.docs[0].data(),
+          ...{ uid: result.docs[0].id },
+        })
+      })
   },
 
   async listProfiles({ commit }) {
@@ -108,14 +121,55 @@ export const actions = {
     }
 
     const data = results.docs.map((doc) => {
-      const { displayName, photoURL, bio, slug } = doc.data()
+      const { displayName, photoURL, bio, slug, nFollowers, nFollowed } =
+        doc.data()
 
       return {
         uid: doc.id,
-        ...{ displayName, photoURL, bio, slug },
+        ...{
+          displayName,
+          photoURL: photoURL ?? '',
+          bio: bio ?? '',
+          slug,
+          nFollowers: nFollowers ?? 0,
+          nFollowed: nFollowed ?? 0,
+        },
       }
     })
 
     commit('ADD_PROFILES', data)
+  },
+
+  async follow({ commit }, { followUid }) {
+    const { uid } = this.$cookies.get('user')
+
+    const result = await this.$fire.firestore
+      .collection('users')
+      .doc(followUid)
+      .collection('followers')
+      .doc(uid)
+      .get()
+
+    if (result.exists === false) {
+      await this.$fire.firestore
+        .collection('users')
+        .doc(followUid)
+        .collection('followers')
+        .doc(uid)
+        .set({
+          userRef: `users/${uid}`,
+        })
+
+      commit('USER_FOLLOWED')
+    } else {
+      await this.$fire.firestore
+        .collection('users')
+        .doc(followUid)
+        .collection('followers')
+        .doc(uid)
+        .delete()
+
+      commit('USER_UNFOLLOWED')
+    }
   },
 }

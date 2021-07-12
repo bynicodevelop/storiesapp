@@ -8,7 +8,7 @@
       <h2 class="mb-2">@{{ profile.slug }}</h2>
       <p v-if="profile.bio != ''">{{ profile.bio }}</p>
 
-      <v-btn v-if="displayFollowBtn" color="primary" small>
+      <v-btn v-if="displayFollowBtn" color="primary" small @click="follow">
         {{ $t('components.btn.follow.follow-label') }}
       </v-btn>
 
@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, useStore } from '@nuxtjs/composition-api'
+import { PROFILE } from '~/store/profile'
 
 export default defineComponent({
   props: {
@@ -58,6 +59,16 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+  },
+  setup(props) {
+    const { profile } = props
+    const store = useStore()
+
+    const follow = async () => {
+      store.dispatch(PROFILE.ACTIONS.FOLLOW, { followUid: profile.uid })
+    }
+
+    return { follow }
   },
 })
 </script>
