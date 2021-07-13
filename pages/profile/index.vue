@@ -12,7 +12,8 @@
         </v-btn>
       </v-col>
     </v-row>
-    <profile-header-component :display-follow-btn="false" :profile="profile" />
+
+    <profile-header-component />
   </div>
 </template>
 
@@ -28,6 +29,7 @@ import { AUTH } from '~/store/auth'
 export default defineComponent({
   setup() {
     const store = useStore()
+
     useAsync(() => store.dispatch(AUTH.ACTIONS.GET_PROFILE))
 
     const profile = computed(() => store.getters[AUTH.GETTERS.GET_PROFILE])

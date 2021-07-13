@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import ParameterRequiredException from '~/exceptions/ParameterRequiredException'
-import UserNotFoundException from '~/exceptions/UserNotFoundException'
+import { setProfile } from '../models/profile'
 
 export const PROFILE = {
   GETTERS: {
@@ -22,35 +22,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  PROFILE_LOADED: (
-    state,
-    {
-      uid,
-      slug,
-      displayName,
-      photoURL,
-      bio,
-      nFollowers,
-      nFollowed,
-      facebook_link,
-      twitter_link,
-      instagram_link,
-      snapchat_link,
-    }
-  ) =>
-    (state.profile = {
-      uid,
-      slug,
-      displayName,
-      photoURL,
-      bio,
-      nFollowers,
-      nFollowed,
-      facebook_link,
-      twitter_link,
-      instagram_link,
-      snapchat_link,
-    }),
+  PROFILE_LOADED: setProfile,
   ADD_PROFILES: (state, data) => {
     state.profiles = state.profiles.concat(
       data.filter(({ uid }) => !state.profiles.find((r) => r.uid == uid))
@@ -126,14 +98,12 @@ export const actions = {
 
       return {
         uid: doc.id,
-        ...{
-          displayName,
-          photoURL: photoURL ?? '',
-          bio: bio ?? '',
-          slug,
-          nFollowers: nFollowers ?? 0,
-          nFollowed: nFollowed ?? 0,
-        },
+        displayName,
+        photoURL: photoURL ?? '',
+        bio: bio ?? '',
+        slug,
+        nFollowers: nFollowers ?? 0,
+        nFollowed: nFollowed ?? 0,
       }
     })
 

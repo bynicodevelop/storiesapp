@@ -4,6 +4,7 @@ import InvalidEmailException from '../exceptions/InvalidEmailException'
 import InvalidPasswordException from '../exceptions/InvalidPasswordException'
 import UserAlreadyExistsException from '../exceptions/UserAlreadyExistsException'
 import FatalErrorException from '../exceptions/FatalErrorException'
+import { profileModel, setProfile } from '../models/profile'
 
 export const AUTH = {
   ACTIONS: {
@@ -30,33 +31,7 @@ export const getters = {
 
 export const mutations = {
   IS_AUTHENTICATED: (state, status = false) => (state.isAuthenticated = status),
-  SET_PROFILE: (
-    state,
-    {
-      email,
-      photoURL,
-      displayName,
-      slug,
-      bio,
-      youtube_link,
-      twitter_link,
-      instagram_link,
-      facebook_link,
-      snapchat_link,
-    }
-  ) =>
-    (state.profile = {
-      email,
-      photoURL,
-      displayName,
-      slug,
-      bio,
-      youtube_link,
-      twitter_link,
-      instagram_link,
-      facebook_link,
-      snapchat_link,
-    }),
+  SET_PROFILE: setProfile,
 }
 
 export const actions = {
@@ -100,6 +75,8 @@ export const actions = {
   },
 
   async getProfile({ commit }) {
+    this.dispatch('loading')
+
     const { uid } = this.$cookies.get('user') ?? {}
 
     if (uid == undefined) {
@@ -115,7 +92,12 @@ export const actions = {
       throw new FatalErrorException('User not found')
     }
 
-    commit('SET_PROFILE', userRef.data())
+    commit('SET_PROFILE', {
+      ...{ uid: userRef.id },
+      ...userRef.data(),
+    })
+
+    this.dispatch('isLoaded')
   },
 
   async saveProfile(

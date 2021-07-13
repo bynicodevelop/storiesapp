@@ -8,6 +8,7 @@ export const state = () => ({
 
 export const mutations = {
   IS_LOADED: (state) => (state.loading = false),
+  LOADING: (state) => (state.loading = true),
 }
 
 export const actions = {
@@ -16,6 +17,7 @@ export const actions = {
 
     await dispatch('loadApp')
   },
+
   async loadApp({ dispatch }) {
     const { uid } = this.$cookies.get('user') ?? {}
 
@@ -25,7 +27,12 @@ export const actions = {
       })
     }
   },
+
   isLoaded({ commit }) {
     commit('IS_LOADED')
+  },
+
+  loading({ commit }) {
+    commit('LOADING')
   },
 }

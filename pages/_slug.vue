@@ -1,5 +1,5 @@
 <template>
-  <profile-header-component :profile="profile" />
+  <profile-header-component />
 </template>
 
 <script>
@@ -10,11 +10,9 @@ import {
   useRoute,
   useStore,
 } from '@nuxtjs/composition-api'
-import ProfileHeaderComponent from '~/components/ProfileHeaderComponent.vue'
 import { PROFILE } from '~/store/profile'
 
 export default defineComponent({
-  components: { ProfileHeaderComponent },
   setup() {
     const store = useStore()
     const route = useRoute()
@@ -27,9 +25,7 @@ export default defineComponent({
 
     const profile = computed(() => store.getters[PROFILE.GETTERS.GET_PROFILE])
 
-    return {
-      profile,
-    }
+    return { profile }
   },
 })
 </script>
