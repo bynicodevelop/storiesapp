@@ -75,8 +75,6 @@ export const actions = {
   },
 
   async getProfile({ commit }) {
-    this.dispatch('loading')
-
     const { uid } = this.$cookies.get('user') ?? {}
 
     if (uid == undefined) {
@@ -96,8 +94,6 @@ export const actions = {
       ...{ uid: userRef.id },
       ...userRef.data(),
     })
-
-    this.dispatch('isLoaded')
   },
 
   async saveProfile(
